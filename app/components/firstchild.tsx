@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import "./firstchild.scss";
-import Image from "next/image";
+// import Image from "next/image";
 
 const FirstChild = () => {
   return (
