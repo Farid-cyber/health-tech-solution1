@@ -1,0 +1,80 @@
+@mixin media($max_width) {
+    @media only screen and (max-width: $max_width) {
+        @content;
+    }
+}
+
+.hospitals-wrapper {
+    max-width: 1250px;
+    padding-top: 30px;
+    // border: 1px solid;
+    min-height: 300px;
+    margin: 0 auto;
+    // display: flex;
+    // flex-wrap: wrap;
+    padding-bottom: 40px;
+
+    .hospitals {
+        min-height:300px;
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+
+
+
+        .hospital {
+            width: 350px;
+            // width: 100%;
+            min-height: 300px;
+            // display: flex;
+            // flex-wrap: wrap;
+            gap: 10px;
+            border-radius: 10px;
+            // flex-direction: row;
+
+
+            // border: 1px solid;
+            // box-shadow: 15px 15px 10px 10px rgb(227, 226, 226);
+
+            img {
+                // height: 100%;
+                width: 100%;
+                border-top-left-radius: 10px;
+                border-bottom-left-radius: 10px;
+                // width: 400px;
+            }
+
+            .second-child {
+                // width: 50%;/
+                padding: 10px;
+
+                h1 {
+                    font-size: 17px;
+                    font-weight: 600;
+                    color: black;
+                }
+
+                h2 {
+                    font-size: 15px;
+                    font-weight: 500;
+                    color: black;
+                }
+
+                h3 {
+                    font-size: 17px;
+                    font-weight: 600;
+                    color: rgb(202, 199, 199);
+                }
+
+                h4 {
+                    font-size: 17px;
+                    font-weight: 600;
+                    color: rgb(15, 14, 14);
+                }
+            }
+        }
+    }
+
+
+}

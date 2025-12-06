@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+
+.doctors-page-wrapper {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+    padding: 20px;
+
+    // border: 1px solid;
+
+    .button2-wrapper {
+        display: flex;
+        width: 100%;
+        justify-content: end;
+
+        button {
+            width: 100px;
+            padding: 10px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(82, 0, 217, 1);
+            color: white;
+            font-family: "Noto Sans", sans-serif;
+            border-radius: 10px;
+            font-size: 13px;
+        }
+    }
+
+    .life{
+        padding: 20px;
+    }
+
+    .rodal {
+        // width: 340px;
+        border-radius: 20px;
+        padding: 0 !important;
+
+        // div {
+
+        .rodal-body-scroll {
+            max-height: 85vh;
+            /* fits screen */
+            overflow-y: auto;
+            /* enables scroll */
+            padding: 20px;
+
+
+            p {
+                font-size: 20px;
+                font-weight: 500;
+                color: rgba(0, 0, 0, 1);
+                line-height: 100%;
+                text-align: center;
+                margin-top: 35px;
+            }
+
+            .rodal-inside {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                margin-top: 10px;
+
+                input {
+                    width: 100%;
+                    height: 40px;
+                    border: 1px solid rgba(148, 148, 148, 1);
+                    border-radius: 10px;
+                    padding: 10px;
+                }
+
+                textarea {
+                    height: 127px;
+                    width: 100%;
+                    padding: 10px;
+                    border: 1px solid rgba(148, 148, 148, 1);
+                    border-radius: 10px;
+                }
+            }
+
+            .submit-button {
+                width: 100%;
+                height: 50px;
+                background-color: rgba(36, 93, 48, 1);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 20px;
+                margin-top: 50px;
+                color: white;
+            }
+
+            .comment-button {
+                width: 100%;
+                height: 50px;
+                background-color: rgb(65, 65, 247);
+                display: flex;
+                font-size: 14px;
+                align-items: center;
+                justify-content: center;
+                border-radius: 20px;
+                margin-top: 20px;
+                color: white;
+                padding: 20px;
+            }
+
+
+        }
+    }
+}
