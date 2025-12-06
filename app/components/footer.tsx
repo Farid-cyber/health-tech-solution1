@@ -31,7 +31,7 @@ const Footer = () => {
             <li>Axborot xavfsizligi siyosati</li>
           </ul>
         </div>
-        <img className="image-hero5" src="/Group 17 (1).svg" alt="" />
+        <img className="image-hero5" src="/group17.svg" alt="" />
       </div>
     </footer>
   );

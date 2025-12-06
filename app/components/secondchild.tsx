@@ -1,3 +1,4 @@
+import Image from "next/image";
 import "./secondchild.scss";
 
 const SecondChild = () => {
@@ -18,11 +19,7 @@ const SecondChild = () => {
             </p>
           </div>
           <div className="right-child1-hero1">
-            <img
-              className="medicine12"
-              src="/Online Doctor-rafiki 1.svg"
-              alt=""
-            />
+            <img className="medicine12" src="/online-doctor.svg" alt="" />
           </div>
         </div>
         <div className="child1-hero1 addition">
@@ -71,9 +68,11 @@ const SecondChild = () => {
             </p>
           </div>
           <div className="right-child1-hero1">
-            <img
+            <Image
+              width={100}
+              height={100}
               className="medicine"
-              src="/Person with medical mask-pana 1.svg"
+              src="/person-mask.svg"
               alt=""
             />
           </div>

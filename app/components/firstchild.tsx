@@ -39,7 +39,7 @@ const FirstChild = () => {
       <div className="right-child">
         <img
           alt="rasm"
-          src={"/doctor-medical.webp"}
+          src={"/doctor.webp"}
           width={1000}
           height={100}
         />
