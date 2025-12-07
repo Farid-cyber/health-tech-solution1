@@ -48,7 +48,7 @@ const HospitalPage = () => {
           <option selected value="">All</option>
           <option value="Toshkent">Toshkent</option>
           <option value="Samarqand">Samarqand</option>
-          <option value="Buxuro">Buxuro</option>
+          <option value="Buxoro">Buxoro</option>
           <option value="Farg'ona">Farg'ona</option>
           <option value="Andijon">Andijon</option>
           <option value="Namangan">Namangan</option>
