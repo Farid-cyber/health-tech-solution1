@@ -8,23 +8,28 @@ import toast, { Toaster } from "react-hot-toast";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hook";
 // import { fetchDoctors } from "@/app/redux/slices/doctors";
 import { Hospital } from "@/app/type";
-import { addHospital, fetchHospitals } from "@/app/redux/slices/hospital";
+import {
+  addHospital,
+  deleteHospital,
+  fetchHospitals,
+  setEditingHos,
+  updateHospital,
+} from "@/app/redux/slices/hospital";
 
 const Doctors = () => {
-  const { hospitals } = useAppSelector((state) => state.hospitals);
+  const { hospitals, isEditingId } = useAppSelector((state) => state.hospitals);
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [hospital, setHospital] = useState<Hospital>({
     name: "",
-    phonenumber: "",
-    // telegramUserName: "",
-    email: "",
-    // degree: "",
-    location: "",
-    // jobdescription: "",
-    workinghours: "",
-    imageUrl: "",
+    shahar: "",
+    manzil: "",
+    telefon: "",
+    turi: "",
+    rasm: "",
+    joylashuv: "",
+    ish_vaqti: "",
   });
 
   // console.log(doctors);
@@ -32,9 +37,6 @@ const Doctors = () => {
   const handleSave = async () => {
     if (
       // hospital.degree === "" ||
-      hospital.email === "" ||
-      hospital.name === "" ||
-      hospital.location === "" ||
       !imageFile
     ) {
       toast.error("Formani to'liq to'ldiring");
@@ -45,15 +47,33 @@ const Doctors = () => {
       const base64Image = reader.result as string;
       const doctorObject: Hospital = {
         ...hospital,
-        imageUrl: base64Image,
+        rasm: base64Image,
       };
       console.log(doctorObject);
+      if (isEditingId === null) {
+        dispatch(addHospital(doctorObject));
+      } else {
+        const { id, ...userObj } = doctorObject; // Remove id from object
+        if (!id) {
+          return;
+        }
+        dispatch(updateHospital({ id, userObj }));
+        dispatch(setEditingHos(null));
+      }
       // addDoctor(doctorObject);
-      dispatch(addHospital(doctorObject));
+
       toast.success("Hospital qo'shildi!");
       setOpen(false);
     };
     reader.readAsDataURL(imageFile);
+  };
+
+  const handleEdit = (hospital: Hospital) => {
+    console.log(hospital);
+
+    dispatch(setEditingHos(hospital)); // use dispatch here for Redux
+    setHospital(hospital); // local state for form
+    setOpen(true);
   };
 
   useEffect(() => {
@@ -102,15 +122,32 @@ const Doctors = () => {
                   // scope="row"
                   className="px!-6 py-4!"
                 >
-                  <img width={100} src={c.imageUrl} alt="" />
+                  {/* <img width={100} src={c.imageUrl} alt="" /> */}
                 </th>
+                <td className="px-6! py-4 ml-5!">{c.id}</td>
                 <td className="px-6! py-4 ml-5!">{c.name}</td>
-                <td className="px-6! py-4">{c.phonenumber}</td>
+                {/* <td className="px-6! py-4">{c.phonenumber}</td> */}
                 {/* <td className="px-6 py-4">{c.telegramUserName}</td> */}
-                <td className="px-6 py-4">{c.email}</td>
+                {/* <td className="px-6 py-4">{c.email}</td> */}
                 {/* <td className="px-6 py-4">{c.degree}</td> */}
-                <td className="px-6 py-4">{c.location}</td>
-                <td className="px-6 py-4">{c.workinghours}</td>
+                {/* <td className="px-6 py-4">{c.location}</td>/ */}
+                {/* <td className="px-6 py-4">{c.workinghours}</td> */}
+                <td>
+                  <button
+                    onClick={() => dispatch(deleteHospital(c.id!))}
+                    className="bg-black p-2 rounded text-white"
+                  >
+                    delete
+                  </button>
+                </td>
+                <td>
+                  <button
+                    onClick={() => handleEdit(c)}
+                    className="bg-black p-2 rounded"
+                  >
+                    Edit
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -123,14 +160,13 @@ const Doctors = () => {
           setOpen(false),
             setHospital({
               name: "",
-              phonenumber: "",
-              // telegramUserName: "",
-              email: "",
-              // degree: "",
-              location: "",
-              // jobdescription: "",
-              workinghours: "",
-              imageUrl: "",
+              shahar: "",
+              manzil: "",
+              telefon: "",
+              turi: "",
+              rasm: "",
+              joylashuv: "",
+              ish_vaqti: "",
             });
         }}
         customStyles={{
@@ -169,16 +205,16 @@ const Doctors = () => {
           </div>
           <div className="mt-2 flex gap-2">
             <div className="flex flex-col gap-2 rodal-inside">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">Turi</label>
               <input
                 className="form-control mt-2"
                 type="email"
                 name="email..."
                 id="email"
                 placeholder="Email..."
-                value={hospital.email}
+                value={hospital.turi}
                 onChange={(e) =>
-                  setHospital({ ...hospital, email: e.target.value })
+                  setHospital({ ...hospital, turi: e.target.value })
                 }
               />
             </div>
@@ -190,9 +226,9 @@ const Doctors = () => {
                 name="number..."
                 id="number"
                 placeholder="Phone Number..."
-                value={hospital.phonenumber}
+                value={hospital.telefon}
                 onChange={(e) =>
-                  setHospital({ ...hospital, phonenumber: e.target.value })
+                  setHospital({ ...hospital, telefon: e.target.value })
                 }
               />
             </div>
@@ -205,9 +241,9 @@ const Doctors = () => {
               name="working..."
               id="working"
               placeholder="9PM-18PM..."
-              value={hospital.workinghours}
+              value={hospital.ish_vaqti}
               onChange={(e) =>
-                setHospital({ ...hospital, workinghours: e.target.value })
+                setHospital({ ...hospital, ish_vaqti: e.target.value })
               }
             />
           </div>
@@ -219,9 +255,37 @@ const Doctors = () => {
               name="location..."
               id="location"
               placeholder="Location.."
-              value={hospital.location}
+              value={hospital.manzil}
               onChange={(e) =>
-                setHospital({ ...hospital, location: e.target.value })
+                setHospital({ ...hospital, manzil: e.target.value })
+              }
+            />
+          </div>
+          <div className="mt-2 rodal-inside">
+            <label htmlFor="city">City</label>
+            <input
+              className="form-control mt-2"
+              type="text"
+              name="name"
+              id="city"
+              placeholder="shahar..."
+              value={hospital.shahar}
+              onChange={(e) =>
+                setHospital({ ...hospital, shahar: e.target.value })
+              }
+            />
+          </div>
+          <div className="mt-2 rodal-inside">
+            <label htmlFor="location">Joylashuv</label>
+            <input
+              className="form-control mt-2"
+              type="text"
+              name="name"
+              id="location"
+              placeholder="Joylashv..."
+              value={hospital.joylashuv}
+              onChange={(e) =>
+                setHospital({ ...hospital, joylashuv: e.target.value })
               }
             />
           </div>

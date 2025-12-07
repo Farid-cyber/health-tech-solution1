@@ -14,8 +14,36 @@
     // flex-wrap: wrap;
     padding-bottom: 40px;
 
+    .wrapper-of-buttons {
+        width: 100%;
+        display: flex;
+        padding-bottom: 20px;
+        align-items: center;
+        gap: 10px;
+
+        input {
+            max-width: 500px;
+            width: 100%;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid;
+            padding: 10px;
+        }
+
+        select {
+            width: 200px;
+            height: 30px;
+            border: 1px solid;
+            border-radius: 5px;
+        }
+
+        option{
+            padding: 5px;
+        }
+    }
+
     .hospitals {
-        min-height:300px;
+        min-height: 300px;
         width: 100%;
         display: flex;
         flex-wrap: wrap;
@@ -26,13 +54,15 @@
         .hospital {
             width: 350px;
             // width: 100%;
-            min-height: 300px;
+            height: 300px;
             // display: flex;
             // flex-wrap: wrap;
+            // border: 1px solid;
             gap: 10px;
             border-radius: 10px;
             // flex-direction: row;
-
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px !important;
 
             // border: 1px solid;
             // box-shadow: 15px 15px 10px 10px rgb(227, 226, 226);
@@ -40,8 +70,9 @@
             img {
                 // height: 100%;
                 width: 100%;
+                height: 170px;
                 border-top-left-radius: 10px;
-                border-bottom-left-radius: 10px;
+                border-bottom-left-radius: 10px !important;
                 // width: 400px;
             }
 
@@ -50,25 +81,25 @@
                 padding: 10px;
 
                 h1 {
-                    font-size: 17px;
+                    font-size: 15px;
                     font-weight: 600;
                     color: black;
                 }
 
                 h2 {
-                    font-size: 15px;
+                    font-size: 12px;
                     font-weight: 500;
                     color: black;
                 }
 
                 h3 {
-                    font-size: 17px;
+                    font-size: 14px;
                     font-weight: 600;
                     color: rgb(202, 199, 199);
                 }
 
                 h4 {
-                    font-size: 17px;
+                    font-size: 14px;
                     font-weight: 600;
                     color: rgb(15, 14, 14);
                 }

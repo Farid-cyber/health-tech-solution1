@@ -40,7 +40,7 @@ export default function RootLayout({
     <div className="flex flex-col">
       <Provider store={store}>
         <Header />
-        <div className="main">
+        <div className="main w-full">
           <html lang="en">
             <body>{children}</body>
           </html>

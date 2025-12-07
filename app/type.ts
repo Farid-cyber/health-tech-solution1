@@ -14,11 +14,13 @@ export type Doctor = {
 export type Hospital = {
   id?: string;
   name: string;
-  location: string;
-  phonenumber: string;
-  email: string;
-  imageUrl: string;
-  workinghours: string;
+  shahar: string;
+  manzil: string;
+  telefon: string;
+  turi: string;
+  rasm: string;
+  joylashuv: string;
+  ish_vaqti: string;
 };
 
 export type Xabar = {

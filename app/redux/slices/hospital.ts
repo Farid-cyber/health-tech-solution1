@@ -12,7 +12,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 // const BASE_API_URL = "http://localhost:8000/hospitals";
-
+const API_BASE_URL = "https://69342e574090fe3bf01f3100.mockapi.io";
 // import { type Hospital } from "../types";
 
 export type State = {
@@ -20,12 +20,16 @@ export type State = {
   isLoading: boolean;
   error: null | string;
   isEditingId: null | Hospital;
+  hospitalname: string;
+  cityName: string;
 };
 const initialState: State = {
   hospitals: [],
   isLoading: true,
   error: null,
   isEditingId: null,
+  hospitalname: "",
+  cityName: "",
 };
 
 const useReducer2 = createSlice({
@@ -34,6 +38,12 @@ const useReducer2 = createSlice({
   reducers: {
     setEditingHos: (state, action) => {
       state.isEditingId = action.payload;
+    },
+    setProtitle: (state, action) => {
+      state.hospitalname = action.payload;
+    },
+    setCityName: (state, action) => {
+      state.cityName = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -65,6 +75,12 @@ const useReducer2 = createSlice({
         if (index !== -1) {
           state.hospitals[index] = action.payload;
         }
+      })
+      .addCase(fetchHospitalsByTitle.fulfilled, (state, action) => {
+        state.hospitals = action.payload;
+      })
+      .addCase(fetchHospitalsByCity.fulfilled, (state, action) => {
+        state.hospitals = action.payload;
       });
   },
 });
@@ -72,24 +88,88 @@ const useReducer2 = createSlice({
 export const fetchHospitals = createAsyncThunk(
   "hospitals/fetchHospitals",
   async () => {
-    const snapshot = await getDocs(collection(db, "hospitals"));
-    const data = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Hospital[];
-    return data;
+    try {
+      const response = await fetch(`${API_BASE_URL}/hospitals`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch hospitals");
+      }
+      const data = await response.json();
+      return data as Hospital[];
+    } catch (e) {
+      console.error("Error fetching hospitals: ", e);
+      throw e;
+    }
+  }
+);
+
+export const fetchHospitalsByTitle = createAsyncThunk(
+  "products/fetchHospitalsByTitle",
+  async (hospitalname: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/hospitals`);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch hospitals");
+      }
+      const allProducts = await response.json();
+      if (hospitalname === "") return allProducts;
+
+      const filtered = allProducts.filter((p: Hospital) =>
+        p.name.toUpperCase().includes(hospitalname.toUpperCase())
+      );
+
+      return filtered;
+    } catch (e) {
+      console.error("Error fetching products by title:", e);
+      throw e;
+    }
+  }
+);
+
+export const fetchHospitalsByCity = createAsyncThunk(
+  "products/fetchHospitalsByCity",
+  async (cityName: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/hospitals`);
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch hospitals");
+      }
+      const allProducts = await response.json();
+      if (cityName === "") return allProducts;
+
+      const filtered = allProducts.filter((p: Hospital) =>
+        p.shahar.toUpperCase().includes(cityName.toUpperCase())
+      );
+
+      return filtered;
+    } catch (e) {
+      console.error("Error fetching products by title:", e);
+      throw e;
+    }
   }
 );
 
 export const addHospital = createAsyncThunk(
   "hospitals/addHospital",
-  async (catObject: Hospital) => {
+  async (hospital: Hospital) => {
     try {
-      await addDoc(collection(db, "hospitals"), catObject);
-      // Optionally re-fetch hospitals or return newly added one
-      return catObject;
+      const response = await fetch(`${API_BASE_URL}/hospitals`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(hospital),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to add hospital");
+      }
+
+      const data = await response.json();
+      return data as Hospital;
     } catch (e) {
-      console.error("Error adding document: ", e);
+      console.error("Error adding hospital: ", e);
       throw e;
     }
   }
@@ -99,10 +179,17 @@ export const deleteHospital = createAsyncThunk(
   "hospitals/deleteHospital",
   async (id: string) => {
     try {
-      await deleteDoc(doc(db, "hospitals", id));
+      const response = await fetch(`${API_BASE_URL}/hospitals/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete hospital");
+      }
+
       return id;
     } catch (e) {
-      console.error("Error deleting document: ", e);
+      console.error("Error deleting hospital: ", e);
       throw e;
     }
   }
@@ -112,11 +199,22 @@ export const updateHospital = createAsyncThunk(
   "hospitals/updateHospital",
   async ({ id, userObj }: { id: string; userObj: Omit<Hospital, "id"> }) => {
     try {
-      const docRef = doc(db, "hospitals", id);
-      await updateDoc(docRef, userObj);
-      return { id, ...userObj };
+      const response = await fetch(`${API_BASE_URL}/hospitals/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userObj),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update hospital");
+      }
+
+      const data = await response.json();
+      return data as Hospital;
     } catch (e) {
-      console.error("Error updating document: ", e);
+      console.error("Error updating hospital: ", e);
       throw e;
     }
   }
@@ -124,4 +222,4 @@ export const updateHospital = createAsyncThunk(
 
 export default useReducer2.reducer;
 
-export const { setEditingHos } = useReducer2.actions;
+export const { setEditingHos, setProtitle, setCityName } = useReducer2.actions;
