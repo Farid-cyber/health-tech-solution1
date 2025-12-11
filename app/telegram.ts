@@ -10,6 +10,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { db } from "./firebase/firebase.con";
+import { message } from "telegraf/filters";
 
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN!);
 
@@ -104,7 +105,7 @@ bot.action(/doctor_(.+)/, async (ctx) => {
 });
 
 // --- COLLECT NAME / PHONE / DESCRIPTION ---
-bot.on("text", async (ctx) => {
+bot.on(message("text"), async (ctx) => {
   if (ctx.session?.step === "name") {
     ctx.session.user_name = ctx.message.text;
     ctx.session.step = "phone";
