@@ -132,5 +132,6 @@ bot.on(message("text"), async (ctx) => {
     ctx.session = {} as SessionData;
   }
 });
+bot.launch();
 
 export default bot;
