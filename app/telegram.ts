@@ -58,7 +58,7 @@ bot.hears("🩺 Book Consultation", (ctx) => {
 
 // --- CATEGORY SELECTED ---
 bot.hears(
-  ["Cardiologist", "Dentist", "Dermatologist", "Neurologist"],
+  ["urologiya", "Jarrohlik onkologiyasi", "Onco-ophthalmologis", "Ophthalmologist"],
   async (ctx) => {
     const job = ctx.message.text;
     ctx.session.job = job; // store job instead of category
