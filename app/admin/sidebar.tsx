@@ -42,6 +42,7 @@ export default function Sidebar({ sidebar }: InitialProps) {
 
   const signOu = () => {
     // console.log(auth);
+    localStorage.removeItem("userId");
     signOut(auth)
       .then(() => {
         console.log("// Sign-out successful.");

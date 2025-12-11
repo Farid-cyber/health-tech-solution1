@@ -10,6 +10,8 @@ import { auth } from "../firebase.auth/firebaseauth.con";
 
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { useAppDispatch, useAppSelector } from "../redux/hook";
+import { fetchDoctors } from "../redux/slices/doctors";
 
 const Header = () => {
   const pathname = usePathname();
@@ -17,18 +19,29 @@ const Header = () => {
   useEffect(() => {}, [pathname]);
   const [id, setId] = useState<null | string>(null);
   const [checkAdmin, setCheckAdmin] = useState<string | null>(null);
+  const { doctors } = useAppSelector((state) => state.doctors);
+  const dispatch = useAppDispatch();
 
   const check = () => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setCheckAdmin(user.email!);
+        // if()
+        const findedDoctor = doctors.find((c) => c.email === user.email);
+        if (findedDoctor) {
+          setCheckAdmin("doctor");
+        } else if (user.email === "farid@gmail.com") {
+          setCheckAdmin("farid@gmail.com");
+        } else {
+          setCheckAdmin(user.email);
+        }
+
         if (!user.uid || user.uid === "") {
           router.push("/registration");
         } else {
           setId(user.uid);
         }
       } else {
-        setCheckAdmin(null);
+        setCheckAdmin("");
         setId(null);
       }
     });
@@ -50,6 +63,8 @@ const Header = () => {
 
   useEffect(() => {
     check();
+    dispatch(fetchDoctors());
+    // checking();
   }, [checkAdmin]);
   return (
     <div className="header">
@@ -155,6 +170,32 @@ const Header = () => {
           >
             Admin
           </button>
+        ) : checkAdmin === "doctor" ? (
+          <button
+            onClick={() => router.push("/admin/consultations")}
+            className="kirish-button"
+          >
+            My Profile
+          </button>
+        ) : checkAdmin !== "" ? (
+          <button onClick={logout} className="kirish-button">
+            Chiqish
+          </button>
+        ) : (
+          <button
+            onClick={() => router.push("/registration")}
+            className="kirish-button"
+          >
+            Kirish
+          </button>
+        )}
+        {/* {checkAdmin === "farid@gmail.com" ? (
+          <button
+            onClick={() => router.push("/admin/consultations")}
+            className="kirish-button"
+          >
+            Admin
+          </button>
         ) : (
           <>
             {id === null ? (
@@ -170,7 +211,27 @@ const Header = () => {
               </button>
             )}
           </>
-        )}
+        )} */}
+        {/* {checkAdmin === "admin" ? (
+          <>
+            <button
+              onClick={() => router.push("/admin/consultations")}
+              className="kirish-button"
+            >
+              Admin
+            </button>
+          </>
+        ) : checkAdmin === "user" ? (
+          <>
+            <button onClick={logout} className="kirish-button">
+              Chiqish
+            </button>
+          </>
+        ) : (
+          <button onClick={logout} className="kirish-button">
+            Panel
+          </button>
+        )} */}
       </div>
     </div>
   );

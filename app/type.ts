@@ -9,6 +9,7 @@ export type Doctor = {
   jobdescription: string;
   workinghours: string;
   imageUrl: string;
+  password: string;
 };
 
 export type Hospital = {
@@ -40,3 +41,30 @@ export type OxirgiXabar = {
   author: string;
   description: string;
 };
+
+export type User = {
+  email: string;
+  password: string;
+  fullname?: string;
+  userType?: string;
+  id?: string;
+};
+
+
+import "telegraf";
+
+declare module "telegraf" {
+  interface SessionData {
+    job?: string;               // selected doctor job
+    doctor_email?: string;      // selected doctor email
+    doctor_name?: string;       // selected doctor name
+    step?: string;              // current step of user input
+    user_name?: string;         // patient name
+    phone?: string;             // patient phone
+    issue_type?: string;        // optional if you still use it
+  }
+
+  interface Context {
+    session: SessionData;
+  }
+}

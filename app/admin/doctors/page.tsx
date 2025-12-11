@@ -7,12 +7,15 @@ import "rodal/lib/rodal.css";
 import toast, { Toaster } from "react-hot-toast";
 import { useAppDispatch, useAppSelector } from "@/app/redux/hook";
 import { addDoctor, fetchDoctors } from "@/app/redux/slices/doctors";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/app/firebase.auth/firebaseauth.con";
 
 const Doctors = () => {
   const { doctors } = useAppSelector((state) => state.doctors);
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [id, setId] = useState<string>("");
   const [doctor, setDoctor] = useState<Doctor>({
     fullname: "",
     phonenumber: "",
@@ -23,9 +26,8 @@ const Doctors = () => {
     jobdescription: "",
     workinghours: "",
     imageUrl: "",
+    password: "",
   });
-
-  // console.log(doctors);
 
   const handleSave = async () => {
     if (
@@ -40,6 +42,17 @@ const Doctors = () => {
     }
     const reader = new FileReader();
     reader.onloadend = () => {
+      // createUserWithEmailAndPassword(auth, doctor.email, doctor.password)
+      //   .then((userCredential) => {
+      //     toast.success("Siz muvaffaqiyatli ro'yxatdan o'tdingiz");
+      //     const user = userCredential.user;
+      //     console.log(user.displayName);
+      //     setId(user.uid)
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //     toast.error(`${error}`);
+      //   });
       const base64Image = reader.result as string;
       const doctorObject: Doctor = {
         ...doctor,
@@ -139,6 +152,7 @@ const Doctors = () => {
               jobdescription: "",
               workinghours: "",
               imageUrl: "",
+              password:""
             });
         }}
         customStyles={{
@@ -269,6 +283,20 @@ const Doctors = () => {
               value={doctor.workinghours}
               onChange={(e) =>
                 setDoctor({ ...doctor, workinghours: e.target.value })
+              }
+            />
+          </div>
+          <div className="mt-2 rodal-inside">
+            <label htmlFor="password">Password</label>
+            <input
+              className="form-control mt-2"
+              type="text"
+              name="password..."
+              id="password"
+              placeholder="password..."
+              value={doctor.password}
+              onChange={(e) =>
+                setDoctor({ ...doctor, password: e.target.value })
               }
             />
           </div>

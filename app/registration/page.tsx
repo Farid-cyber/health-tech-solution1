@@ -8,14 +8,33 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase.auth/firebaseauth.con";
 import toast, { Toaster } from "react-hot-toast";
+// import { User } from "../type";
+// import { useAppDispatch, useAppSelector } from "../redux/hook";
+// import { fetchUsers } from "../redux/slices/users";
 
 const Register = () => {
+  // const [users, setUsers] = useState<User[]>([]);
+  // const { users } = useAppSelector((state) => state.users);
+  // const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const [emailadress, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleEnter = () => {
+    // const user = users.find((c) => c.email === emailadress);
+    // if (!user) {
+    //   toast.error("Iltimos ro'xatdan o'ting");
+    // } else {
+    //   const password1 = users.find((c) => c.password === password);
+    //   if (password1) {
+    //     const userId = users.find((c) => c.email === emailadress)!
+    //       .id as unknown as string;
+    //     console.log(userId);
+    //     localStorage.setItem("userId", userId);
+    //     router.push("/");
+    //   }
+    // }
     if (emailadress === "" || password === "") {
       toast.error("Formani to'liq to'ldiring.");
       return;
@@ -53,6 +72,10 @@ const Register = () => {
   };
 
   const handleSave = () => {
+    // const user = users.find((c) => c.email === emailadress);
+    // if (!user) {
+    //   toast.error("Iltimos ro'xatdan o'ting");
+    // }
     if (emailadress === "" || password === "") {
       toast.error("Formani to'liq to'ldiring.");
       return;
@@ -68,12 +91,15 @@ const Register = () => {
         const user = userCredential.user;
         console.log(user.displayName);
         setOpen(false);
+        router.push("/");
       })
       .catch((error) => {
         console.log(error);
         toast.error(`${error}`);
       });
   };
+
+  // console.log(users);
 
   return (
     <div className="register">

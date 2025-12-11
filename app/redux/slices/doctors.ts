@@ -1,7 +1,9 @@
+import { secondaryAuth } from "@/app/firebase.auth/firebaseauth.con";
 import { db } from "@/app/firebase/firebase.con";
 import { Doctor } from "@/app/type";
 // import { Doctor } from "@/app/types";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import {
   addDoc,
   collection,
@@ -19,12 +21,16 @@ export type State = {
   isLoading: boolean;
   error: null | string;
   isEditingId: null | Doctor;
+  doctorName: string;
+  jobName: string;
 };
 const initialState: State = {
   doctors: [],
   isLoading: true,
   error: null,
   isEditingId: null,
+  doctorName: "",
+  jobName: "",
 };
 
 const useReducer1 = createSlice({
@@ -33,6 +39,12 @@ const useReducer1 = createSlice({
   reducers: {
     setEditingDoc: (state, action) => {
       state.isEditingId = action.payload;
+    },
+    setdoctorName: (state, action) => {
+      state.doctorName = action.payload;
+    },
+    setjobName: (state, action) => {
+      state.jobName = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -48,13 +60,17 @@ const useReducer1 = createSlice({
         state.isLoading = false;
         state.error = "Failed";
       })
+      .addCase(fetchDoctorsByName.fulfilled, (state, action) => {
+        state.doctors = action.payload;
+      })
+      .addCase(fetchDoctorsByJobName.fulfilled, (state, action) => {
+        state.doctors = action.payload;
+      })
       .addCase(addDoctor.fulfilled, (state, action) => {
         state.doctors.push(action.payload);
       })
       .addCase(deleteDoctor.fulfilled, (state, action) => {
-        state.doctors = state.doctors.filter(
-          (c) => c.id !== action.payload
-        );
+        state.doctors = state.doctors.filter((c) => c.id !== action.payload);
       })
       .addCase(updateDoctor.fulfilled, (state, action) => {
         state.isEditingId = null;
@@ -80,10 +96,53 @@ export const fetchDoctors = createAsyncThunk(
   }
 );
 
+export const fetchDoctorsByName = createAsyncThunk(
+  "doctors/fetchDoctorsByName",
+  async (doctorName: string) => {
+    const snapshot = await getDocs(collection(db, "doctors"));
+    const data = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Doctor[];
+    if (doctorName === "") {
+      return data;
+    }
+
+    const filtered = data.filter((c: Doctor) =>
+      c.fullname.toUpperCase().includes(doctorName.toUpperCase())
+    );
+    return filtered;
+  }
+);
+
+export const fetchDoctorsByJobName = createAsyncThunk(
+  "doctors/fetchDoctorsByJobName",
+  async (jobName: string) => {
+    const snapshot = await getDocs(collection(db, "doctors"));
+    const data = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Doctor[];
+    if (jobName === "") {
+      return data;
+    }
+
+    const filtered = data.filter((c: Doctor) =>
+      c.job.toUpperCase().includes(jobName.toUpperCase())
+    );
+    return filtered;
+  }
+);
+
 export const addDoctor = createAsyncThunk(
   "doctors/addDoctor",
   async (catObject: Doctor) => {
     try {
+      await createUserWithEmailAndPassword(
+        secondaryAuth,
+        catObject.email,
+        catObject.password
+      );
       await addDoc(collection(db, "doctors"), catObject);
       // Optionally re-fetch doctors or return newly added one
       return catObject;
@@ -123,4 +182,4 @@ export const updateDoctor = createAsyncThunk(
 
 export default useReducer1.reducer;
 
-export const { setEditingDoc } = useReducer1.actions;
+export const { setEditingDoc, setdoctorName, setjobName } = useReducer1.actions;
