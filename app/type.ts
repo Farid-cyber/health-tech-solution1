@@ -50,21 +50,32 @@ export type User = {
   id?: string;
 };
 
-
 import "telegraf";
 
 declare module "telegraf" {
   interface SessionData {
-    job?: string;               // selected doctor job
-    doctor_email?: string;      // selected doctor email
-    doctor_name?: string;       // selected doctor name
-    step?: string;              // current step of user input
-    user_name?: string;         // patient name
-    phone?: string;             // patient phone
-    issue_type?: string;        // optional if you still use it
+    job?: string; // selected doctor job
+    doctor_email?: string; // selected doctor email
+    doctor_name?: string; // selected doctor name
+    step?: string; // current step of user input
+    user_name?: string; // patient name
+    phone?: string; // patient phone
+    issue_type?: string; // optional if you still use it
   }
 
   interface Context {
     session: SessionData;
   }
 }
+
+export type Order = {
+  doctorEmail: string;
+  fullname: string;
+  phoneNumber: string;
+  problemType: string;
+  problemDescription: string;
+  email: string;
+  contactType: string;
+  telegramUsername: string;
+  type: boolean;
+};
